@@ -7,25 +7,29 @@ import {
   Platform,
   ScrollView,
   Keyboard,
-  TouchableWithoutFeedback,
 } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Input from "../components/input";
-import { Ionicons } from "@expo/vector-icons";
+import Gender from "../components/gender";
+
 import { MaterialIcons } from "@expo/vector-icons";
 
 const Profile = ({ navigation }) => {
   const [profileName, setProfileName] = useState("");
-  const [height, setHeight] = useState("");
-  const [weight, setWeight] = useState("");
-  const [targetWeight, setTargetWeight] = useState("");
   const [gender, setGender] = useState("");
+
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [passAgain, setPassAgain] = useState("");
+
   const [isNameTrue, setIsNameTrue] = useState("");
-  const [isWeightTrue, setIsWeightTrue] = useState("");
-  const [isHeightTrue, setIsHeightTrue] = useState("");
-  const [isTargetTrue, setIsTargetTrue] = useState("");
+  const [isEmailTrue, setIsEmailTrue] = useState("");
+  const [isPassTrue, setIsPassTrue] = useState("");
+  const [isPassAgainTrue, setIsPassAgainTrue] = useState("");
 
   let male = " Male",
-    female = " Female";
+    female = " Female",
+    title = "Create a new profile. Manage your all diet stuffs in one profile.";
 
   return (
     <KeyboardAvoidingView
@@ -35,112 +39,81 @@ const Profile = ({ navigation }) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
           <View style={styles.container}>
-            <Text style={styles.title}>Profile</Text>
+            <Text style={styles.title}>{title}</Text>
             <View style={styles.profileWrapper}>
               <Input
+                label="Profile name"
                 value={profileName}
                 placeholder="Profile name"
                 setValue={setProfileName}
                 type="default"
                 length={20}
                 validation={setIsNameTrue}
-                validateKey={isNameTrue}
+                secureTextEntry={false}
               />
-              <View style={styles.bodyWrapper}>
-                <TouchableWithoutFeedback onPress={() => setGender("m")}>
-                  <Text
-                    style={[
-                      gender === "m"
-                        ? styles.genderText
-                        : styles.genderInvalidText,
-                    ]}
-                  >
-                    <Ionicons
-                      name="md-male"
-                      size={20}
-                      color={gender === "m" ? "#3DCC85" : "#e5e5e5"}
-                    />{" "}
-                    {male}
-                  </Text>
-                </TouchableWithoutFeedback>
+              <Gender gender={gender} setGender={setGender} />
+              <Input
+                label="E-mail"
+                value={email}
+                placeholder="E-mail"
+                setValue={setEmail}
+                type="email-address"
+                length={30}
+                validationEmail={setIsEmailTrue}
+                secureTextEntry={false}
+              />
+              <Input
+                label="Password"
+                value={pass}
+                placeholder="Password"
+                setValue={setPass}
+                type="default"
+                length={20}
+                validation={setIsPassTrue}
+                secureTextEntry={true}
+              />
+              <Input
+                label="Password again"
+                value={passAgain}
+                placeholder="Password again"
+                setValue={setPassAgain}
+                type="default"
+                length={20}
+                validation={setIsPassAgainTrue}
+                secureTextEntry={true}
+              />
 
-                <TouchableWithoutFeedback onPress={() => setGender("f")}>
-                  <Text
-                    style={[
-                      gender === "f"
-                        ? styles.genderText
-                        : styles.genderInvalidText,
-                    ]}
-                  >
-                    <Ionicons
-                      name="md-male"
-                      size={20}
-                      color={gender === "f" ? "#3DCC85" : "#e5e5e5"}
-                    />
-                    {female}
-                  </Text>
-                </TouchableWithoutFeedback>
-              </View>
-              <View style={styles.bodyWrapper}>
-                <Input
-                  value={height}
-                  placeholder="Height (cm)"
-                  setValue={setHeight}
-                  type="numeric"
-                  length={3}
-                  validation={setIsHeightTrue}
-                  validateKey={isHeightTrue}
-                />
-
-                <Input
-                  value={weight}
-                  placeholder="Weight (kg)"
-                  setValue={setWeight}
-                  type="numeric"
-                  length={3}
-                  validation={setIsWeightTrue}
-                  validateKey={isWeightTrue}
-                />
-              </View>
-              <View style={styles.targetWrapper}>
-                <Input
-                  value={targetWeight}
-                  placeholder="Target weight"
-                  setValue={setTargetWeight}
-                  type="numeric"
-                  length={3}
-                  validation={setIsTargetTrue}
-                  validateKey={isTargetTrue}
-                />
-
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    if (
-                      isNameTrue &&
-                      isHeightTrue &&
-                      isWeightTrue &&
-                      isTargetTrue &&
-                      (gender === "f" || gender === "m")
-                    )
-                      navigation.navigate("contentRoute");
-                  }}
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  if (
+                    isNameTrue &&
+                    isEmailTrue &&
+                    isPassTrue &&
+                    isPassAgainTrue &&
+                    pass === passAgain &&
+                    (gender === "f" || gender === "m")
+                  )
+                    navigation.navigate("Setup", {
+                      gender: gender,
+                    });
+                }}
+              >
+                <View
+                  style={[
+                    isNameTrue &&
+                    isEmailTrue &&
+                    isPassTrue &&
+                    isPassAgainTrue &&
+                    pass === passAgain &&
+                    (gender === "f" || gender === "m")
+                      ? styles.saveValid
+                      : styles.saveInvalid,
+                  ]}
                 >
-                  <View
-                    style={[
-                      isNameTrue &&
-                      isHeightTrue &&
-                      isWeightTrue &&
-                      isTargetTrue &&
-                      (gender === "f" || gender === "m")
-                        ? styles.saveWrapper
-                        : styles.saveInvalid,
-                    ]}
-                  >
-                    <MaterialIcons name="add" size={20} color="#fff" />
-                    <Text style={styles.save}>Create</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
+                  <MaterialIcons name="add" size={20} color="#fff" />
+                  <Text style={styles.save}>Create</Text>
+                </View>
+              </TouchableWithoutFeedback>
             </View>
           </View>
         </ScrollView>
@@ -154,15 +127,18 @@ export default Profile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#fff",
   },
   title: {
-    fontSize: 40,
+    fontSize: 14,
     fontFamily: "Jost-Regular",
-    margin: 55,
-    letterSpacing: 3,
+    textAlign: "center",
+    padding: "5%",
+    marginHorizontal: "10%",
+    marginTop: "10%",
+    marginBottom: "5%",
     color: "#424242",
   },
   profileWrapper: {
@@ -170,11 +146,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   genderText: {
-    flex: 1,
     fontSize: 14,
-    color: "#3DCC85",
+    color: "#fff",
+    backgroundColor: "#3DCC85",
     fontFamily: "Jost-Regular",
-    backgroundColor: "#fff",
     elevation: 5,
     margin: 5,
     padding: 10,
@@ -182,7 +157,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   genderInvalidText: {
-    flex: 1,
     fontSize: 14,
     color: "#B7B7B7",
     fontFamily: "Jost-Regular",
@@ -193,19 +167,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     letterSpacing: 1,
   },
-  bodyWrapper: {
-    width: "100%",
+  genderWrapper: {
+    flex: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "stretch",
+    justifyContent: "center",
   },
   targetWrapper: {
     width: "60%",
     marginLeft: "20%",
   },
-  saveWrapper: {
-    width: "70%",
-    marginLeft: "15%",
+  saveValid: {
+    width: "50%",
+    marginLeft: "25%",
     marginTop: 5,
     flexDirection: "row",
     justifyContent: "center",
@@ -215,8 +188,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   saveInvalid: {
-    width: "70%",
-    marginLeft: "15%",
+    width: "50%",
+    marginLeft: "25%",
     marginTop: 5,
     flexDirection: "row",
     justifyContent: "center",

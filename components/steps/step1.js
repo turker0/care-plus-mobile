@@ -1,40 +1,43 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import Input from "../input";
+import BMITable from "./bmiTable";
 
-const Step1 = () => {
-  const [height, setHeight] = useState("");
+import Next from "./next";
+
+const Step1 = ({ height, weight, setHeight, setWeight, setIndicate }) => {
   const [isHeightTrue, setIsHeightTrue] = useState(false);
-  const [weight, setWeight] = useState("");
   const [isweightTrue, setIsweightTrue] = useState(false);
-  const [result, setResult] = useState(false);
+  const [result, setResult] = useState("");
+  const [tableVisible, setTableVisible] = useState(false);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>body mass index</Text>
-      <Input
-        value={height}
-        placeholder="Height (cm)"
-        setValue={setHeight}
-        type="numeric"
-        length={3}
-        validateKey={isHeightTrue}
-        validation={setIsHeightTrue}
-      />
-      <Input
-        value={weight}
-        placeholder="Weight (kg)"
-        setValue={setWeight}
-        type="numeric"
-        length={3}
-        validateKey={isweightTrue}
-        validation={setIsweightTrue}
-      />
+      <View style={styles.inputWrapper}>
+        <Input
+          label="Height"
+          value={height}
+          placeholder="Height (cm)  "
+          setValue={setHeight}
+          type="numeric"
+          length={3}
+          validation={setIsHeightTrue}
+        />
+        <Input
+          label="Weight"
+          value={weight}
+          placeholder="Weight (kg)   "
+          setValue={setWeight}
+          type="numeric"
+          length={3}
+          validation={setIsweightTrue}
+        />
+      </View>
       <TouchableWithoutFeedback
         onPress={() => {
           if (isHeightTrue && isweightTrue)
-            setResult((weight / (height * height)).toFixed(2));
+            setResult(((weight / (height * height)) * 10000).toFixed(0));
         }}
       >
         <View style={styles.calculateWrapper}>
@@ -42,13 +45,14 @@ const Step1 = () => {
           <Text style={styles.calculate}>calculate</Text>
         </View>
       </TouchableWithoutFeedback>
-      <Text>{result}</Text>
-      <TouchableWithoutFeedback>
-        <View style={styles.nextWrapper}>
-          <Text style={styles.next}>next</Text>
-          <MaterialIcons name="navigate-next" size={24} color="#3DCC85" />
-        </View>
+      <Text style={styles.result}>{result}</Text>
+      <TouchableWithoutFeedback onPress={() => setTableVisible(true)}>
+        <Text style={styles.table}>
+          {result ? "see bmi table details" : null}
+        </Text>
       </TouchableWithoutFeedback>
+      <BMITable visible={tableVisible} setVisible={setTableVisible} />
+      <Next indicate={2} setIndicate={setIndicate} result={result} />
     </View>
   );
 };
@@ -60,18 +64,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "stretch",
-    borderRadius: 8,
-    borderColor: "#3DCC85",
-    borderLeftWidth: 0.5,
-    borderRightWidth: 0.5,
     paddingHorizontal: 20,
+    backgroundColor: "#fff",
+    borderRadius: 24,
   },
   title: {
     fontSize: 16,
     fontFamily: "Jost-Bold",
     textAlign: "center",
     color: "#3DCC85",
-    margin: 5,
+    margin: 10,
+  },
+  inputWrapper: {
+    flexDirection: "row",
+    justifyContent: "center",
   },
   calculateWrapper: {
     flexDirection: "row",
@@ -90,6 +96,22 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Jost-Regular",
     marginLeft: 5,
+  },
+  result: {
+    fontSize: 18,
+    marginTop: 20,
+    marginBottom: 10,
+    fontFamily: "Jost-Bold",
+    textAlign: "center",
+    textAlignVertical: "center",
+    color: "#3DCC85",
+  },
+  table: {
+    fontSize: 12,
+    fontFamily: "Jost-Bold",
+    textAlign: "center",
+    textAlignVertical: "center",
+    color: "#424242",
   },
   nextWrapper: {
     flexDirection: "row",
