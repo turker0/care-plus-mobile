@@ -3,7 +3,6 @@ import * as React from "react";
 import Home from "../screens/home";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Diet from "../screens/diet";
-import BMI from "../screens/bmi";
 import Foods from "../screens/foods";
 import About from "../screens/about";
 
@@ -27,7 +26,6 @@ const homeRoute = () => {
     >
       <homeStack.Screen name="Home" component={Home} />
       <homeStack.Screen name="Diet" component={Diet} />
-      <homeStack.Screen name="BMI" component={BMI} />
       <homeStack.Screen name="Foods" component={Foods} />
       <homeStack.Screen name="About" component={About} />
     </homeStack.Navigator>

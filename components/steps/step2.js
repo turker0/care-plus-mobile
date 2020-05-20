@@ -1,15 +1,43 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
-import { Picker } from "@react-native-community/picker";
 import { AntDesign } from "@expo/vector-icons";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, FlatList } from "react-native-gesture-handler";
 import Input from "../input";
 import Next from "./next";
+import Exercise from "./exercise";
 
 const Step2 = ({ gender, height, weight, age, setAge, setIndicate }) => {
-  const [selectedValue, setSelectedValue] = useState("Little / no exercise");
+  const [index, setIndex] = useState(0);
   const [result, setResult] = useState("");
   const [isAgeTrue, setIsAgeTrue] = useState(false);
+  const excersice = [
+    {
+      id: "0",
+      title: "Little/no exercise",
+      const: 1.2,
+    },
+    {
+      id: "1",
+      title: "Light exercise",
+      const: 1.375,
+    },
+    {
+      id: "2",
+      title: "Moderate exercise (3-5 days/week)",
+      const: 1.55,
+    },
+    {
+      id: "3",
+      title: "Very active (6-7 days/week)",
+      const: 1.725,
+    },
+    {
+      id: "4",
+      title: "Extra active (very active & physical job)",
+      const: 1.9,
+    },
+  ];
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -28,55 +56,48 @@ const Step2 = ({ gender, height, weight, age, setAge, setIndicate }) => {
             editable={false}
           />
         </View>
-
-        <Input
-          label="Age"
-          value={age}
-          placeholder="Age  "
-          setValue={setAge}
-          type="numeric"
-          length={3}
-          validation={setIsAgeTrue}
-        />
+        <View style={styles.ageWrapper}>
+          <Input
+            label="Age"
+            value={age}
+            placeholder="Age  "
+            setValue={setAge}
+            type="numeric"
+            length={3}
+            validation={setIsAgeTrue}
+          />
+        </View>
 
         <View style={styles.pickerWrapper}>
-          <Picker
-            selectedValue={selectedValue}
-            style={styles.picker}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedValue(itemValue)
-            }
-          >
-            <Picker.Item label="Light exercise" value="1.375" />
-            <Picker.Item
-              label="Moderate exercise (3-5 days/week)"
-              value="1.55"
-            />
-            <Picker.Item label="Very active (6-7 days/week)" value="1.725" />
-            <Picker.Item
-              label="Extra active (very active & physical job)"
-              value="1.9"
-            />
-          </Picker>
+          <Text style={styles.pickerTitle}>
+            Choose your weekly exercise level.
+          </Text>
+          <FlatList
+            data={excersice}
+            renderItem={({ item }) => (
+              <Exercise
+                desc={item.title}
+                type={item.id}
+                index={index}
+                setIndex={setIndex}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+          />
         </View>
         <TouchableWithoutFeedback
           onPress={() => {
             //BMR for Men = 66.47 + (13.75 * weight [kg]) + (5.003 * size [cm]) − (6.755 * age [years])
             //BMR for Women = 655.1 + (9.563 * weight [kg]) + (1.85 * size [cm]) − (4.676 * age [years])
-            console.log(gender);
             setResult(
               gender === "m" && isAgeTrue
                 ? (
-                    66.47 +
-                    13.75 * weight +
-                    5.003 * height -
-                    6.755 * age
+                    (66.47 + 13.75 * weight + 5.003 * height - 6.755 * age) *
+                    excersice[index].const
                   ).toFixed(0)
                 : (
-                    655.1 +
-                    9.563 * weight +
-                    1.85 * height -
-                    4.676 * age
+                    (655.1 + 9.563 * weight + 1.85 * height - 4.676 * age) *
+                    excersice[index].const
                   ).toFixed(0)
             );
           }}
@@ -122,14 +143,16 @@ const styles = StyleSheet.create({
   },
   pickerWrapper: {
     borderRadius: 8,
-    overflow: "hidden",
     elevation: 5,
-    color: "#fff",
-    backgroundColor: "#3DCC85",
-    fontSize: 10,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  picker: {
-    fontSize: 10,
+  pickerTitle: {
+    fontSize: 14,
+    fontFamily: "Jost-Medium",
+    color: "#3DCC85",
+    marginBottom: 5,
   },
   calculateWrapper: {
     flexDirection: "row",

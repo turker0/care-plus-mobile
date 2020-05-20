@@ -11,6 +11,7 @@ import {
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Input from "../components/input";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Apple from "../assets/svgs/apple";
 
 const Welcome = ({ navigation }) => {
   const [mail, setMail] = useState("");
@@ -30,6 +31,7 @@ const Welcome = ({ navigation }) => {
               <Text style={styles.titleLeft}>Care, </Text>
               <Text style={styles.titleRight}>Plus</Text>
             </View>
+            <Apple />
             <View style={styles.entryWrapper}>
               <Input
                 label="E-mail"
@@ -93,6 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#fff",
+    marginBottom: 100,
   },
   titleWrapper: {
     flexDirection: "row",

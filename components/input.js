@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     zIndex: 0,
     fontSize: 14,
-    color: "#3DCC85",
+    color: "#424242",
     fontFamily: "Jost-Regular",
     backgroundColor: "#fff",
     elevation: 5,
