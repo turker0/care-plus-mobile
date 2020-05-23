@@ -8,8 +8,6 @@ const Input = ({
   setValue,
   type,
   length,
-  validation,
-  validationEmail,
   secureTextEntry,
   label,
   editable,
@@ -21,24 +19,14 @@ const Input = ({
       </View>
       <TextInput
         style={styles.profileName}
-        onChangeText={(text) => {
-          setValue(text);
-          if (validation) {
-            if (text.length >= 2) {
-              validation(true);
-            } else validation(false);
-          } else {
-            let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            if (reg.test(text) === false) validationEmail(false);
-            else validationEmail(true);
-          }
-        }}
+        onChangeText={(text) => setValue(text)}
         value={value}
         placeholder={placeholder}
         keyboardType={type}
         maxLength={length}
         secureTextEntry={secureTextEntry}
         editable={editable}
+        autoCapitalize="none"
       />
     </View>
   );

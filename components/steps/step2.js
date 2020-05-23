@@ -4,12 +4,21 @@ import { AntDesign } from "@expo/vector-icons";
 import { ScrollView, FlatList } from "react-native-gesture-handler";
 import Input from "../input";
 import Next from "./next";
+import Back from "./back";
 import Exercise from "./exercise";
 
-const Step2 = ({ gender, height, weight, age, setAge, setIndicate }) => {
+const Step2 = ({
+  gender,
+  height,
+  weight,
+  age,
+  setAge,
+  setIndicate,
+  bmr,
+  setBmr,
+}) => {
   const [index, setIndex] = useState(0);
-  const [result, setResult] = useState("");
-  const [isAgeTrue, setIsAgeTrue] = useState(false);
+
   const excersice = [
     {
       id: "0",
@@ -64,7 +73,6 @@ const Step2 = ({ gender, height, weight, age, setAge, setIndicate }) => {
             setValue={setAge}
             type="numeric"
             length={3}
-            validation={setIsAgeTrue}
           />
         </View>
 
@@ -89,17 +97,19 @@ const Step2 = ({ gender, height, weight, age, setAge, setIndicate }) => {
           onPress={() => {
             //BMR for Men = 66.47 + (13.75 * weight [kg]) + (5.003 * size [cm]) − (6.755 * age [years])
             //BMR for Women = 655.1 + (9.563 * weight [kg]) + (1.85 * size [cm]) − (4.676 * age [years])
-            setResult(
-              gender === "m" && isAgeTrue
-                ? (
-                    (66.47 + 13.75 * weight + 5.003 * height - 6.755 * age) *
-                    excersice[index].const
-                  ).toFixed(0)
-                : (
-                    (655.1 + 9.563 * weight + 1.85 * height - 4.676 * age) *
-                    excersice[index].const
-                  ).toFixed(0)
-            );
+            if (age !== 0) {
+              setBmr(
+                gender === "m"
+                  ? (
+                      (66.47 + 13.75 * weight + 5.003 * height - 6.755 * age) *
+                      excersice[index].const
+                    ).toFixed(0)
+                  : (
+                      (655.1 + 9.563 * weight + 1.85 * height - 4.676 * age) *
+                      excersice[index].const
+                    ).toFixed(0)
+              );
+            }
           }}
         >
           <View style={styles.calculateWrapper}>
@@ -108,8 +118,11 @@ const Step2 = ({ gender, height, weight, age, setAge, setIndicate }) => {
           </View>
         </TouchableWithoutFeedback>
 
-        <Text style={styles.result}>{result}</Text>
-        <Next indicate={3} setIndicate={setIndicate} result={result} />
+        <Text style={styles.result}>bmr : {bmr}</Text>
+        <View style={styles.navigationWrapper}>
+          <Back indicate={1} setIndicate={setIndicate} />
+          <Next indicate={3} setIndicate={setIndicate} />
+        </View>
       </View>
     </ScrollView>
   );
@@ -180,5 +193,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textAlignVertical: "center",
     color: "#3DCC85",
+  },
+  navigationWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });

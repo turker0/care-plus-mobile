@@ -11,21 +11,37 @@ import {
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Input from "../components/input";
 import Gender from "../components/gender";
-
+import BackButton from "../components/backButton";
 import { MaterialIcons } from "@expo/vector-icons";
+import CustomError from "../components/customerror";
+
+const checkExistence = (mail, setError, setIsExists) => {
+  fetch("http://192.168.1.6:3000/api/profiles/" + mail, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    },
+  })
+    .then((res) => {
+      if (res.status == 200) {
+        setError("E-mail is used.");
+        setIsExists(true);
+      } else {
+        setIsExists(false);
+      }
+    })
+    .then((resJson) => {})
+    .catch((err) => console.log(err));
+};
 
 const Profile = ({ navigation }) => {
   const [profileName, setProfileName] = useState("");
   const [gender, setGender] = useState("");
-
-  const [email, setEmail] = useState("");
+  const [mail, setMail] = useState("");
   const [pass, setPass] = useState("");
   const [passAgain, setPassAgain] = useState("");
-
-  const [isNameTrue, setIsNameTrue] = useState("");
-  const [isEmailTrue, setIsEmailTrue] = useState("");
-  const [isPassTrue, setIsPassTrue] = useState("");
-  const [isPassAgainTrue, setIsPassAgainTrue] = useState("");
+  const [isExists, setIsExists] = useState(true);
+  const [error, setError] = useState(false);
 
   let male = " Male",
     female = " Female",
@@ -39,7 +55,9 @@ const Profile = ({ navigation }) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
           <View style={styles.container}>
+            <BackButton navigation={navigation} screen="Welcome" />
             <Text style={styles.title}>{title}</Text>
+            {error ? <CustomError text={error} /> : null}
             <View style={styles.profileWrapper}>
               <Input
                 label="Profile name"
@@ -48,18 +66,16 @@ const Profile = ({ navigation }) => {
                 setValue={setProfileName}
                 type="default"
                 length={20}
-                validation={setIsNameTrue}
                 secureTextEntry={false}
               />
               <Gender gender={gender} setGender={setGender} />
               <Input
                 label="E-mail"
-                value={email}
+                value={mail}
                 placeholder="E-mail"
-                setValue={setEmail}
+                setValue={setMail}
                 type="email-address"
                 length={30}
-                validationEmail={setIsEmailTrue}
                 secureTextEntry={false}
               />
               <Input
@@ -69,7 +85,6 @@ const Profile = ({ navigation }) => {
                 setValue={setPass}
                 type="default"
                 length={20}
-                validation={setIsPassTrue}
                 secureTextEntry={true}
               />
               <Input
@@ -79,39 +94,34 @@ const Profile = ({ navigation }) => {
                 setValue={setPassAgain}
                 type="default"
                 length={20}
-                validation={setIsPassAgainTrue}
                 secureTextEntry={true}
               />
 
               <TouchableWithoutFeedback
                 onPress={() => {
                   if (
-                    isNameTrue &&
-                    isEmailTrue &&
-                    isPassTrue &&
-                    isPassAgainTrue &&
+                    profileName &&
+                    gender &&
+                    mail &&
+                    pass &&
+                    passAgain &&
                     pass === passAgain &&
                     (gender === "f" || gender === "m")
-                  )
-                    navigation.navigate("Setup", {
-                      gender: gender,
-                    });
+                  ) {
+                    checkExistence(mail, setError, setIsExists);
+                    if (!isExists)
+                      navigation.navigate("Setup", {
+                        profileName: profileName,
+                        gender: gender,
+                        mail: mail,
+                        pass: pass,
+                      });
+                  }
                 }}
               >
-                <View
-                  style={[
-                    isNameTrue &&
-                    isEmailTrue &&
-                    isPassTrue &&
-                    isPassAgainTrue &&
-                    pass === passAgain &&
-                    (gender === "f" || gender === "m")
-                      ? styles.saveValid
-                      : styles.saveInvalid,
-                  ]}
-                >
+                <View style={styles.save}>
                   <MaterialIcons name="add" size={20} color="#fff" />
-                  <Text style={styles.save}>Create</Text>
+                  <Text style={styles.saveText}>Create</Text>
                 </View>
               </TouchableWithoutFeedback>
             </View>
@@ -176,7 +186,7 @@ const styles = StyleSheet.create({
     width: "60%",
     marginLeft: "20%",
   },
-  saveValid: {
+  save: {
     width: "50%",
     marginLeft: "25%",
     marginTop: 5,
@@ -187,18 +197,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 10,
   },
-  saveInvalid: {
-    width: "50%",
-    marginLeft: "25%",
-    marginTop: 5,
-    flexDirection: "row",
-    justifyContent: "center",
-    backgroundColor: "#B7B7B7",
-    elevation: 5,
-    borderRadius: 8,
-    paddingVertical: 10,
-  },
-  save: {
+
+  saveText: {
     fontSize: 14,
     textAlign: "center",
     color: "#fff",

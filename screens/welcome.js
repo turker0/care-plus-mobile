@@ -11,13 +11,44 @@ import {
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Input from "../components/input";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Apple from "../assets/svgs/apple";
+import CustomError from "../components/customerror";
+
+const Login = (mail, pass, navigation, setError) => {
+  let account = {
+    mail: mail,
+    password: pass,
+  };
+  let formBody = [];
+
+  for (var key in account) {
+    var encodedKey = encodeURIComponent(key);
+    var encodedValue = encodeURIComponent(account[key]);
+    formBody.push(encodedKey + "=" + encodedValue);
+  }
+  formBody = formBody.join("&");
+
+  fetch("http://192.168.1.6:3000/api/profiles/login", {
+    method: "POST",
+    body: formBody,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    },
+  })
+    .then((res) => res.json())
+    .then((resJson) => {
+      if (resJson.success) {
+        navigation.navigate("Home");
+      } else {
+        setError("Wrong e-mail or password. Please try again");
+      }
+    })
+    .catch((err) => console.log(err));
+};
 
 const Welcome = ({ navigation }) => {
-  const [mail, setMail] = useState("");
-  const [pass, setPass] = useState("");
-  const [isEmailTrue, setIsEmailTrue] = useState("");
-  const [isPassTrue, setIsPassTrue] = useState("");
+  const [error, setError] = useState(false);
+  const [mail, setMail] = useState(false);
+  const [pass, setPass] = useState(false);
 
   return (
     <KeyboardAvoidingView
@@ -31,8 +62,9 @@ const Welcome = ({ navigation }) => {
               <Text style={styles.titleLeft}>Care, </Text>
               <Text style={styles.titleRight}>Plus</Text>
             </View>
-            <Apple />
+
             <View style={styles.entryWrapper}>
+              {error ? <CustomError text={error} /> : null}
               <Input
                 label="E-mail"
                 value={mail}
@@ -40,7 +72,6 @@ const Welcome = ({ navigation }) => {
                 setValue={setMail}
                 type="default"
                 length={30}
-                validationEmail={setIsEmailTrue}
                 secureTextEntry={false}
               />
 
@@ -51,26 +82,19 @@ const Welcome = ({ navigation }) => {
                 setValue={setPass}
                 type="default"
                 length={30}
-                validation={setIsPassTrue}
                 secureTextEntry={true}
               />
 
               <TouchableWithoutFeedback
                 onPress={() => {
-                  if (isEmailTrue && isPassTrue) {
-                    navigation.navigate("Home");
+                  if (mail && pass) {
+                    Login(mail, pass, navigation, setError);
                   }
                 }}
               >
-                <View
-                  style={[
-                    isEmailTrue && isPassTrue
-                      ? styles.loginValid
-                      : styles.loginInvalid,
-                  ]}
-                >
+                <View style={styles.login}>
                   <MaterialCommunityIcons name="login" size={20} color="#fff" />
-                  <Text style={styles.login}>login</Text>
+                  <Text style={styles.loginText}>login</Text>
                 </View>
               </TouchableWithoutFeedback>
               <Text style={styles.or}>or</Text>
@@ -119,7 +143,7 @@ const styles = StyleSheet.create({
     width: "70%",
     padding: 10,
   },
-  loginValid: {
+  login: {
     width: "70%",
     marginLeft: "15%",
     marginTop: 5,
@@ -130,18 +154,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 10,
   },
-  loginInvalid: {
-    width: "70%",
-    marginLeft: "15%",
-    marginTop: 5,
-    flexDirection: "row",
-    justifyContent: "center",
-    backgroundColor: "#B7B7B7",
-    elevation: 5,
-    borderRadius: 8,
-    paddingVertical: 10,
-  },
-  login: {
+  loginText: {
     fontSize: 14,
     textAlign: "center",
     color: "#fff",

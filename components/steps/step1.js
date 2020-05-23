@@ -6,10 +6,15 @@ import BMITable from "./bmiTable";
 
 import Next from "./next";
 
-const Step1 = ({ height, weight, setHeight, setWeight, setIndicate }) => {
-  const [isHeightTrue, setIsHeightTrue] = useState(false);
-  const [isweightTrue, setIsweightTrue] = useState(false);
-  const [result, setResult] = useState("");
+const Step1 = ({
+  height,
+  weight,
+  setHeight,
+  setWeight,
+  setIndicate,
+  bmi,
+  setBmi,
+}) => {
   const [tableVisible, setTableVisible] = useState(false);
   return (
     <View style={styles.container}>
@@ -22,7 +27,6 @@ const Step1 = ({ height, weight, setHeight, setWeight, setIndicate }) => {
           setValue={setHeight}
           type="numeric"
           length={3}
-          validation={setIsHeightTrue}
         />
         <Input
           label="Weight"
@@ -31,13 +35,11 @@ const Step1 = ({ height, weight, setHeight, setWeight, setIndicate }) => {
           setValue={setWeight}
           type="numeric"
           length={3}
-          validation={setIsweightTrue}
         />
       </View>
       <TouchableWithoutFeedback
         onPress={() => {
-          if (isHeightTrue && isweightTrue)
-            setResult(((weight / (height * height)) * 10000).toFixed(0));
+          setBmi(((weight / (height * height)) * 10000).toFixed(0));
         }}
       >
         <View style={styles.calculateWrapper}>
@@ -45,14 +47,12 @@ const Step1 = ({ height, weight, setHeight, setWeight, setIndicate }) => {
           <Text style={styles.calculate}>calculate</Text>
         </View>
       </TouchableWithoutFeedback>
-      <Text style={styles.result}>{result}</Text>
+      <Text style={styles.result}>bmi : {bmi}</Text>
       <TouchableWithoutFeedback onPress={() => setTableVisible(true)}>
-        <Text style={styles.table}>
-          {result ? "see bmi table details" : null}
-        </Text>
+        <Text style={styles.table}>{bmi ? "see bmi table details" : null}</Text>
       </TouchableWithoutFeedback>
       <BMITable visible={tableVisible} setVisible={setTableVisible} />
-      <Next indicate={2} setIndicate={setIndicate} result={result} />
+      <Next indicate={2} setIndicate={setIndicate} />
     </View>
   );
 };
