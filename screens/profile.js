@@ -43,9 +43,8 @@ const Profile = ({ navigation }) => {
   const [isExists, setIsExists] = useState(true);
   const [error, setError] = useState(false);
 
-  let male = " Male",
-    female = " Female",
-    title = "Create a new profile. Manage your all diet stuffs in one profile.";
+  let title =
+    "Create a new profile. Manage your all diet stuffs in one profile.";
 
   return (
     <KeyboardAvoidingView

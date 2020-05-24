@@ -8,7 +8,8 @@ import About from "../screens/about";
 
 const homeStack = createDrawerNavigator();
 
-const homeRoute = () => {
+const homeRoute = ({ route }) => {
+  let { mail } = route.params;
   return (
     <homeStack.Navigator
       initialRouteName="Home"
@@ -24,7 +25,11 @@ const homeRoute = () => {
       }}
       drawerType="front"
     >
-      <homeStack.Screen name="Home" component={Home} />
+      <homeStack.Screen
+        name="Home"
+        component={Home}
+        initialParams={{ mail: mail }}
+      />
       <homeStack.Screen name="Diet" component={Diet} />
       <homeStack.Screen name="Foods" component={Foods} />
       <homeStack.Screen name="About" component={About} />

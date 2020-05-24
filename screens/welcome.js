@@ -37,7 +37,9 @@ const Login = (mail, pass, navigation, setError) => {
     .then((res) => res.json())
     .then((resJson) => {
       if (resJson.success) {
-        navigation.navigate("Home");
+        navigation.navigate("Home", {
+          mail: mail,
+        });
       } else {
         setError("Wrong e-mail or password. Please try again");
       }
@@ -47,8 +49,8 @@ const Login = (mail, pass, navigation, setError) => {
 
 const Welcome = ({ navigation }) => {
   const [error, setError] = useState(false);
-  const [mail, setMail] = useState(false);
-  const [pass, setPass] = useState(false);
+  const [mail, setMail] = useState("");
+  const [pass, setPass] = useState("");
 
   return (
     <KeyboardAvoidingView

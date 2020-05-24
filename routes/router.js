@@ -5,7 +5,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Welcome from "../screens/welcome";
 import Profile from "../screens/profile";
 import Setup from "../screens/setup";
-import Home from "../screens/home";
 import HomeRoute from "../routes/home";
 import Header from "../components/header";
 
