@@ -37,12 +37,37 @@ const Login = (mail, pass, navigation, setError) => {
     .then((res) => res.json())
     .then((resJson) => {
       if (resJson.success) {
-        navigation.navigate("Home", {
-          mail: mail,
-        });
+        getAccount(mail, navigation);
       } else {
         setError("Wrong e-mail or password. Please try again");
       }
+    })
+    .catch((err) => console.log(err));
+};
+
+const getAccount = (mail, navigation) => {
+  fetch("http://192.168.1.6:3000/api/profiles/" + mail, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    },
+  })
+    .then((res) => res.json())
+    .then((resJson) => {
+      navigation.navigate("Home", {
+        profile: {
+          name: resJson.name,
+          age: resJson.age,
+          mail: mail,
+          gender: resJson.gender,
+          height: resJson.height,
+          weight: resJson.weight,
+          bmi: resJson.bmi,
+          bmr: resJson.bmr,
+          target: resJson.target,
+          date: resJson.date,
+        },
+      });
     })
     .catch((err) => console.log(err));
 };

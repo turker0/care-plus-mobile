@@ -5,11 +5,13 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import Diet from "../screens/diet";
 import Foods from "../screens/foods";
 import About from "../screens/about";
+import Account from "../screens/account";
+import Login from "../screens/welcome";
 
 const homeStack = createDrawerNavigator();
 
 const homeRoute = ({ route }) => {
-  let { mail } = route.params;
+  let { profile } = route.params;
   return (
     <homeStack.Navigator
       initialRouteName="Home"
@@ -28,11 +30,25 @@ const homeRoute = ({ route }) => {
       <homeStack.Screen
         name="Home"
         component={Home}
-        initialParams={{ mail: mail }}
+        initialParams={{ profile: profile }}
       />
-      <homeStack.Screen name="Diet" component={Diet} />
-      <homeStack.Screen name="Foods" component={Foods} />
+      <homeStack.Screen
+        name="Diet"
+        component={Diet}
+        initialParams={{ profile: profile }}
+      />
+      <homeStack.Screen
+        name="Foods"
+        component={Foods}
+        initialParams={{ profile: profile }}
+      />
+      <homeStack.Screen
+        name="Account"
+        component={Account}
+        initialParams={{ profile: profile }}
+      />
       <homeStack.Screen name="About" component={About} />
+      <homeStack.Screen name="Logout" component={Login} />
     </homeStack.Navigator>
   );
 };
