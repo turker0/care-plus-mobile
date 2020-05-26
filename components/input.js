@@ -13,7 +13,7 @@ const Input = ({
   editable,
 }) => {
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.label}>
         <Text style={styles.labelText}>{label}</Text>
       </View>
@@ -35,16 +35,20 @@ const Input = ({
 export default Input;
 
 const styles = StyleSheet.create({
+  container: {
+    position: "relative",
+    width: "70%",
+    alignSelf: "center",
+  },
   label: {
     position: "absolute",
     zIndex: 3, // works on ios
     elevation: 6,
     paddingHorizontal: 5,
     top: 0,
-    left: 10,
+    left: "2%",
     backgroundColor: "#3DCC85",
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
+    borderRadius: 4,
   },
   labelText: {
     fontSize: 10,
@@ -52,15 +56,15 @@ const styles = StyleSheet.create({
     fontFamily: "Jost-Medium",
   },
   profileName: {
-    flex: 1,
+    height: 40,
+    marginVertical: 5,
+    paddingLeft: "2%",
     zIndex: 0,
     fontSize: 14,
     color: "#424242",
     fontFamily: "Jost-Regular",
     backgroundColor: "#fff",
     elevation: 5,
-    margin: 5,
-    padding: 10,
     borderTopRightRadius: 6,
     borderBottomRightRadius: 8,
     borderBottomLeftRadius: 4,

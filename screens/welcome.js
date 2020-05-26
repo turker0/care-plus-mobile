@@ -7,6 +7,9 @@ import {
   Platform,
   ScrollView,
   Keyboard,
+  Dimensions,
+  ImageBackground,
+  StatusBar,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Input from "../components/input";
@@ -38,6 +41,7 @@ const Login = (mail, pass, navigation, setError) => {
     .then((resJson) => {
       if (resJson.success) {
         getAccount(mail, navigation);
+        setError(false);
       } else {
         setError("Wrong e-mail or password. Please try again");
       }
@@ -80,60 +84,66 @@ const Welcome = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : null}
-      style={{ flex: 1, backgroundColor: "#fff" }}
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView>
-          <View style={styles.container}>
-            <View style={styles.titleWrapper}>
-              <Text style={styles.titleLeft}>Care, </Text>
-              <Text style={styles.titleRight}>Plus</Text>
-            </View>
-
-            <View style={styles.entryWrapper}>
-              {error ? <CustomError text={error} /> : null}
-              <Input
-                label="E-mail"
-                value={mail}
-                placeholder="E-mail"
-                setValue={setMail}
-                type="default"
-                length={30}
-                secureTextEntry={false}
-              />
-
-              <Input
-                label="Password"
-                value={pass}
-                placeholder="Password"
-                setValue={setPass}
-                type="default"
-                length={30}
-                secureTextEntry={true}
-              />
-
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  if (mail && pass) {
-                    Login(mail, pass, navigation, setError);
-                  }
-                }}
-              >
-                <View style={styles.login}>
-                  <MaterialCommunityIcons name="login" size={20} color="#fff" />
-                  <Text style={styles.loginText}>login</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <Text style={styles.or}>or</Text>
-              <TouchableWithoutFeedback
-                onPress={() => navigation.navigate("Profile")}
-              >
-                <Text style={styles.profile}>create a new profile</Text>
-              </TouchableWithoutFeedback>
-            </View>
+      <ScrollView>
+        <StatusBar barStyle="light-content" />
+        <ImageBackground
+          style={styles.bg}
+          source={require("../assets/images/bg.jpg")}
+          resizeMode="cover"
+        >
+          <View style={styles.fdWrapper}>
+            <Text style={styles.titleLeft}>Care, </Text>
+            <Text style={styles.titleRight}>Plus</Text>
           </View>
-        </ScrollView>
-      </TouchableWithoutFeedback>
+          <View style={styles.entryWrapper}>
+            {error ? <CustomError text={error} /> : null}
+            <Input
+              label="E-mail"
+              value={mail}
+              placeholder="E-mail"
+              setValue={setMail}
+              type="default"
+              length={30}
+              secureTextEntry={false}
+            />
+
+            <Input
+              label="Password"
+              value={pass}
+              placeholder="Password"
+              setValue={setPass}
+              type="default"
+              length={30}
+              secureTextEntry={true}
+            />
+            <TouchableWithoutFeedback
+              onPress={() => {
+                if (mail && pass) {
+                  Login(mail, pass, navigation, setError);
+                }
+              }}
+            >
+              <View style={styles.login}>
+                <MaterialCommunityIcons name="login" size={20} color="#fff" />
+                <Text style={styles.loginText}>login</Text>
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate("Profile")}
+            >
+              <Text style={styles.profile}>
+                Don't you have a profile? Create a new one.
+              </Text>
+            </TouchableWithoutFeedback>
+          </View>
+        </ImageBackground>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -141,45 +151,50 @@ const Welcome = ({ navigation }) => {
 export default Welcome;
 
 const styles = StyleSheet.create({
-  container: {
+  bg: {
     flex: 1,
-    justifyContent: "flex-start",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
     alignItems: "center",
-    backgroundColor: "#fff",
-    marginBottom: 100,
+    justifyContent: "center",
   },
-  titleWrapper: {
+  fdWrapper: {
+    width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
+    marginTop: Dimensions.get("window").height / 8,
+  },
+  entryWrapper: {
+    width: "100%",
+    height: Dimensions.get("window").height * 0.25,
   },
   titleLeft: {
     fontSize: 40,
-    fontFamily: "Jost-Regular",
-    color: "#424242",
+    fontFamily: "Jost-Medium",
+    color: "#e74c3c",
     letterSpacing: 3,
-    marginVertical: 55,
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -0.5, height: 0.5 },
+    textShadowRadius: 10,
   },
   titleRight: {
     fontSize: 40,
-    fontFamily: "Jost-Medium",
+    fontFamily: "Jost-Bold",
     letterSpacing: 3,
-    color: "#3DCC85",
-  },
-  entryWrapper: {
-    width: "70%",
-    padding: 10,
+    color: "#27ae60",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -0.5, height: 0.5 },
+    textShadowRadius: 10,
   },
   login: {
-    width: "70%",
-    marginLeft: "15%",
-    marginTop: 5,
+    width: "50%",
+    marginLeft: "25%",
     flexDirection: "row",
     justifyContent: "center",
     backgroundColor: "#3DCC85",
     elevation: 5,
+    paddingVertical: "2%",
     borderRadius: 8,
-    paddingVertical: 10,
   },
   loginText: {
     fontSize: 14,
@@ -189,19 +204,17 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     letterSpacing: 1,
   },
-  or: {
-    fontSize: 14,
-    color: "#424242",
-    fontFamily: "Jost-Bold",
-    paddingLeft: 5,
-    textAlign: "center",
-    margin: 10,
-  },
   profile: {
+    width: "50%",
+    alignSelf: "center",
     fontSize: 14,
+    marginTop: "2%",
     color: "#3DCC85",
     fontFamily: "Jost-Bold",
     paddingLeft: 5,
     textAlign: "center",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -0.5, height: 0.5 },
+    textShadowRadius: 10,
   },
 });

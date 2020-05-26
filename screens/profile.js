@@ -11,7 +11,6 @@ import {
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Input from "../components/input";
 import Gender from "../components/gender";
-import BackButton from "../components/backButton";
 import { MaterialIcons } from "@expo/vector-icons";
 import CustomError from "../components/customerror";
 
@@ -54,7 +53,6 @@ const Profile = ({ navigation }) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
           <View style={styles.container}>
-            <BackButton navigation={navigation} screen="Welcome" />
             <Text style={styles.title}>{title}</Text>
             {error ? <CustomError text={error} /> : null}
             <View style={styles.profileWrapper}>
@@ -149,9 +147,10 @@ const styles = StyleSheet.create({
     marginTop: "10%",
     marginBottom: "5%",
     color: "#424242",
+    borderRadius: 12,
   },
   profileWrapper: {
-    width: "70%",
+    width: "100%",
     padding: 10,
   },
   genderText: {

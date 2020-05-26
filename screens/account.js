@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import CustomText from "../components/customText";
 
 const Account = ({ route }) => {
@@ -7,7 +7,17 @@ const Account = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.avatar}>
-        <Text> avatar </Text>
+        {profile.gender === "m" ? (
+          <Image
+            source={require("../assets/images/male.jpg")}
+            style={{ width: 80, height: 80 }}
+          />
+        ) : (
+          <Image
+            source={require("../assets/images/female.jpg")}
+            style={{ width: 80, height: 80 }}
+          />
+        )}
       </View>
       <CustomText label="username" text={profile.name} size={200} />
       <CustomText label="mail" text={profile.mail} size={200} />
@@ -32,15 +42,16 @@ export default Account;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: "20%",
+    paddingTop: "20%",
     alignItems: "center",
+    backgroundColor: "#fff",
   },
   avatar: {
     width: 80,
     height: 80,
     borderRadius: 50,
     backgroundColor: "red",
-    elevation: 5,
+
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 10,

@@ -17,6 +17,5 @@ const styles = StyleSheet.create({
     fontFamily: "Jost-Medium",
     color: "red",
     textAlign: "center",
-    marginBottom: 15,
   },
 });

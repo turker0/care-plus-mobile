@@ -3,11 +3,9 @@ import { StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 const Gender = ({ gender, setGender }) => {
-  let male = " Male",
-    female = " Female";
   return (
     <View style={styles.genderWrapper}>
-      <View style={{ flex: 1 }}>
+      <View style={{ width: "45%", marginRight: "2.5%" }}>
         <TouchableWithoutFeedback onPress={() => setGender("m")}>
           <Text
             style={[
@@ -19,11 +17,11 @@ const Gender = ({ gender, setGender }) => {
               size={20}
               color={gender === "m" ? "#fff" : "#e5e5e5"}
             />{" "}
-            {male}
+            male
           </Text>
         </TouchableWithoutFeedback>
       </View>
-      <View style={{ flex: 1 }}>
+      <View style={{ width: "45%", marginLeft: "2.5%" }}>
         <TouchableWithoutFeedback onPress={() => setGender("f")}>
           <Text
             style={[
@@ -31,11 +29,11 @@ const Gender = ({ gender, setGender }) => {
             ]}
           >
             <Ionicons
-              name="md-male"
+              name="md-female"
               size={20}
               color={gender === "f" ? "#fff" : "#e5e5e5"}
             />
-            {female}
+            female
           </Text>
         </TouchableWithoutFeedback>
       </View>
@@ -47,29 +45,37 @@ export default Gender;
 
 const styles = StyleSheet.create({
   genderWrapper: {
-    flex: 1,
+    width: "70%",
     flexDirection: "row",
     justifyContent: "center",
+    alignSelf: "center",
   },
   genderText: {
-    color: "#fff",
+    height: 40,
+    marginVertical: 5,
+    width: "100%",
+    zIndex: 0,
     fontSize: 14,
+    color: "#fff",
+    textAlign: "center",
+    textAlignVertical: "center",
     fontFamily: "Jost-Regular",
-    margin: 5,
-    elevation: 5,
-    padding: 10,
+    backgroundColor: "#3DCC85",
     borderRadius: 8,
     letterSpacing: 1,
-    backgroundColor: "#3DCC85",
   },
   genderInvalidText: {
-    color: "#B7B7B7",
+    height: 40,
+    marginVertical: 5,
+    width: "100%",
+    zIndex: 0,
+    elevation: 5,
     fontSize: 14,
+    color: "#e5e5e5",
+    textAlign: "center",
+    textAlignVertical: "center",
     fontFamily: "Jost-Regular",
     backgroundColor: "#fff",
-    margin: 5,
-    elevation: 5,
-    padding: 10,
     borderRadius: 8,
     letterSpacing: 1,
   },

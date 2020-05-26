@@ -7,32 +7,45 @@ import Profile from "../screens/profile";
 import Setup from "../screens/setup";
 import HomeRoute from "../routes/home";
 import Header from "../components/header";
+import HeaderWBG from "../components/headerwithbg";
+import { Image } from "react-native";
 
 const profileStack = createStackNavigator();
 
 const profileRoute = () => {
   return (
     <NavigationContainer>
-      <profileStack.Navigator
-        initialRouteName={Welcome}
-        screenOptions={{
-          headerLeft: null,
-          headerStyle: {
-            backgroundColor: "#3DCC85",
-            elevation: 5,
-          },
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontSize: 24,
-            fontFamily: "Jost-Bold",
-            letterSpacing: 1,
-            textAlign: "center",
-            alignSelf: "center",
-          },
-        }}
-      >
-        <profileStack.Screen name="Welcome" component={Welcome} />
-        <profileStack.Screen name="Profile" component={Profile} />
+      <profileStack.Navigator initialRouteName={Welcome}>
+        <profileStack.Screen
+          name="Welcome"
+          component={Welcome}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <profileStack.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerBackground: () => (
+              <Image
+                source={require("../assets/images/headerbg.jpg")}
+                style={{ width: "100%", height: "100%", opacity: 0.8 }}
+                resizeMode="cover"
+              />
+            ),
+            title: "Create a new profile",
+            headerTintColor: "#2ecc71",
+            headerTitleStyle: {
+              fontSize: 24,
+              fontFamily: "Jost-Bold",
+              textShadowColor: "rgba(0, 0, 0, 0.75)",
+              textShadowOffset: { width: -1, height: 1 },
+              textShadowRadius: 10,
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+            },
+          }}
+        />
         <profileStack.Screen name="Setup" component={Setup} />
         <profileStack.Screen
           name="Home"
