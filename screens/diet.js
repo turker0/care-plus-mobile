@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Dimensions, FlatList } from "react-native";
 import {
   ScrollView,
@@ -7,31 +7,38 @@ import {
 } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import DietList from "../components/dietList";
-import DietModal from "../components/diet/dietModal";
 
-const DATA = [
-  {
-    name: "ABababa Kalorilik Ayibogan Dieti1",
-    calorie: 3000,
-  },
-  {
-    name: "3000 Kalorilik Ayibogan Dieti2",
-    calorie: 30002,
-  },
-  {
-    name: "Bebebel alorilik Ayibogan Dieti3",
-    calorie: 30003,
-  },
-];
+let diets;
 
-const nameFilter = (DATA) => {
-  DATA.sort(function (a, b) {
+const getAllDiets = (isUpdated, setIsUpdated, setDiet1) => {
+  if (!isUpdated) {
+    fetch("http://192.168.1.6:3000/api/diets/get/All", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+    })
+      .then((res) => res.json())
+      .then((resJson) => {
+        diets = resJson;
+        //resJson.forEach((element) => console.log(element.name));
+        //console.log(resJson[0]);
+        console.log(diets[0].breakfast);
+        console.log(diets[1].breakfast);
+        setDiet1(resJson[0].name);
+      });
+    setIsUpdated(true);
+  }
+};
+
+const nameFilter = (diets) => {
+  diets.sort(function (a, b) {
     return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
   });
 };
 
-const calorieFilter = (DATA) => {
-  DATA.sort(function (a, b) {
+const calorieFilter = (diets) => {
+  diets.sort(function (a, b) {
     return a.calorie < b.calorie ? -1 : a.calorie > b.calorie ? 1 : 0;
   });
 };
@@ -39,17 +46,17 @@ const calorieFilter = (DATA) => {
 const Diet = () => {
   const [filter, setFilter] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(0);
-  const [name, setName] = useState("Ciguli");
+  const [isUpdated, setIsUpdated] = useState(false);
+  const [diet1, setDiet1] = useState(0);
+  useEffect(() => {
+    getAllDiets(isUpdated, setIsUpdated, setDiet1);
+  });
+
   return (
     <ScrollView>
       <View style={styles.contaienr}>
         <Text style={styles.title}>Diets</Text>
         <Text style={styles.desc}>Search a diet that you want to go on.</Text>
-        <DietModal
-          selectedFilter={selectedFilter}
-          setSelectedFilter={setSelectedFilter}
-          name={name}
-        />
         <View style={styles.filterWrapper}>
           <Ionicons
             name="ios-search"
@@ -71,7 +78,7 @@ const Diet = () => {
           <TouchableOpacity
             onPress={() => {
               setSelectedFilter(0);
-              nameFilter(DATA);
+              nameFilter(diets);
             }}
           >
             <Text style={selectedFilter === 0 ? styles.active : styles.passive}>
@@ -81,7 +88,7 @@ const Diet = () => {
           <TouchableOpacity
             onPress={() => {
               setSelectedFilter(1);
-              calorieFilter(DATA);
+              calorieFilter(diets);
             }}
           >
             <Text style={selectedFilter === 1 ? styles.active : styles.passive}>
@@ -90,16 +97,21 @@ const Diet = () => {
           </TouchableOpacity>
         </View>
         <FlatList
-          data={DATA}
+          data={diets}
+          list
           renderItem={({ item, index }) => (
             <DietList
               name={item.name}
-              calorie={item.calorie}
-              setSelectedFilter={setSelectedFilter}
-              setName={setName}
+              calorie={item.totalCalorie}
+              breakfast={item.breakfast}
+              lunch={item.lunch}
+              dinner={item.dinner}
+              calBreakfast={item.breakfastCalorie}
+              calLunch={item.lunchCalorie}
+              calDinner={item.dinnerCalorie}
             />
           )}
-          keyExtractor={(item, index) => index}
+          listKey={(item2, index) => "D" + index.toString()}
         />
       </View>
     </ScrollView>

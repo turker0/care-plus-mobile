@@ -16,23 +16,19 @@ export default Food;
 const styles = StyleSheet.create({
   container: {
     width: 100,
-    height: 80,
+    height: 90,
     marginHorizontal: 5,
-    marginTop: 10,
     paddingVertical: 10,
-    backgroundColor: "#3DCC85",
-    borderRadius: 12,
-    elevation: 5,
     alignItems: "center",
     justifyContent: "center",
   },
   name: {
-    fontSize: 16,
-    color: "#fff",
+    fontSize: 14,
+    color: "#424242",
     fontFamily: "Jost-Medium",
   },
   desc: {
-    color: "#fff",
+    color: "#424242",
     fontSize: 12,
     fontFamily: "Jost-Regular",
   },
