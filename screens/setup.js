@@ -45,6 +45,7 @@ const Setup = ({ navigation, route }) => {
     bmr: bmr,
     age: age,
     target: target,
+    date: new Date(),
   };
 
   return (

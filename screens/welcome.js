@@ -84,66 +84,63 @@ const Welcome = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : null}
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      style={{ flex: 1, backgroundColor: "#424242" }}
     >
-      <ScrollView>
-        <StatusBar barStyle="light-content" />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ImageBackground
-          style={styles.bg}
           source={require("../assets/images/bg.jpg")}
-          resizeMode="cover"
+          style={styles.bg}
         >
-          <View style={styles.fdWrapper}>
-            <Text style={styles.titleLeft}>Care, </Text>
-            <Text style={styles.titleRight}>Plus</Text>
-          </View>
-          <View style={styles.entryWrapper}>
-            {error ? <CustomError text={error} /> : null}
-            <Input
-              label="E-mail"
-              value={mail}
-              placeholder="E-mail"
-              setValue={setMail}
-              type="default"
-              length={30}
-              secureTextEntry={false}
-            />
+          <ScrollView>
+            <StatusBar barStyle="light-content" />
+            <View style={styles.fdWrapper}>
+              <Text style={styles.titleLeft}>Care, </Text>
+              <Text style={styles.titleRight}>Plus</Text>
+            </View>
+            <View style={styles.entryWrapper}>
+              {error ? <CustomError text={error} /> : null}
+              <Input
+                label="E-mail"
+                value={mail}
+                placeholder="E-mail"
+                setValue={setMail}
+                type="default"
+                length={30}
+                secureTextEntry={false}
+              />
 
-            <Input
-              label="Password"
-              value={pass}
-              placeholder="Password"
-              setValue={setPass}
-              type="default"
-              length={30}
-              secureTextEntry={true}
-            />
-            <TouchableWithoutFeedback
-              onPress={() => {
-                if (mail && pass) {
-                  Login(mail, pass, navigation, setError);
-                }
-              }}
-            >
-              <View style={styles.login}>
-                <MaterialCommunityIcons name="login" size={20} color="#fff" />
-                <Text style={styles.loginText}>login</Text>
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback
-              onPress={() => navigation.navigate("Profile")}
-            >
-              <Text style={styles.profile}>
-                Don't you have a profile? Create a new one.
-              </Text>
-            </TouchableWithoutFeedback>
-          </View>
+              <Input
+                label="Password"
+                value={pass}
+                placeholder="Password"
+                setValue={setPass}
+                type="default"
+                length={30}
+                secureTextEntry={true}
+              />
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  if (mail && pass) {
+                    Login(mail, pass, navigation, setError);
+                  }
+                }}
+              >
+                <View style={styles.login}>
+                  <MaterialCommunityIcons name="login" size={20} color="#fff" />
+                  <Text style={styles.loginText}>login</Text>
+                </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate("Profile")}
+              >
+                <Text style={styles.profile}>
+                  Don't you have a profile? Create a new one.
+                </Text>
+              </TouchableWithoutFeedback>
+            </View>
+          </ScrollView>
         </ImageBackground>
-      </ScrollView>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };
@@ -152,21 +149,17 @@ export default Welcome;
 
 const styles = StyleSheet.create({
   bg: {
-    flex: 1,
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
-    alignItems: "center",
-    justifyContent: "center",
+    width: "100%",
+    height: "100%",
   },
   fdWrapper: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: Dimensions.get("window").height / 8,
+    marginTop: Dimensions.get("window").height * 0.35,
   },
   entryWrapper: {
     width: "100%",
-    height: Dimensions.get("window").height * 0.25,
   },
   titleLeft: {
     fontSize: 40,

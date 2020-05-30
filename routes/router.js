@@ -46,13 +46,51 @@ const profileRoute = () => {
             },
           }}
         />
-        <profileStack.Screen name="Setup" component={Setup} />
+        <profileStack.Screen
+          name="Setup"
+          component={Setup}
+          options={{
+            headerBackground: () => (
+              <Image
+                source={require("../assets/images/headerbg.jpg")}
+                style={{ width: "100%", height: "100%", opacity: 0.8 }}
+                resizeMode="cover"
+              />
+            ),
+            title: "Set up your profile",
+            headerTintColor: "#2ecc71",
+            headerTitleStyle: {
+              fontSize: 24,
+              fontFamily: "Jost-Bold",
+              textShadowColor: "rgba(0, 0, 0, 0.75)",
+              textShadowOffset: { width: -1, height: 1 },
+              textShadowRadius: 10,
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+            },
+          }}
+        />
         <profileStack.Screen
           name="Home"
           component={HomeRoute}
-          options={({ navigation }) => ({
-            headerTitle: () => <Header navigation={navigation} title="Care+" />,
-          })}
+          options={{
+            headerBackground: () => (
+              <Image
+                source={require("../assets/images/headerbg.jpg")}
+                style={{ width: "100%", height: "100%", opacity: 0.8 }}
+                resizeMode="cover"
+              />
+            ),
+            title: "Care+",
+            headerTintColor: "#2ecc71",
+            headerTitleStyle: {
+              fontSize: 24,
+              fontFamily: "Jost-Bold",
+              textShadowColor: "rgba(0, 0, 0, 0.75)",
+              textShadowOffset: { width: -1, height: 1 },
+              textShadowRadius: 10,
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+            },
+          }}
         />
       </profileStack.Navigator>
     </NavigationContainer>

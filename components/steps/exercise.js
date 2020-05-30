@@ -9,7 +9,16 @@ const Exercise = ({ desc, type, index, setIndex }) => {
         setIndex(type);
       }}
     >
-      <Text style={index == type ? styles.descActive : styles.descPassive}>
+      <Text
+        style={
+          index == type
+            ? styles.descPassive
+            : [
+                styles.descPassive,
+                { color: "#424242", backgroundColor: "#e5e5e5" },
+              ]
+        }
+      >
         - {desc}
       </Text>
     </TouchableWithoutFeedback>
@@ -19,14 +28,15 @@ const Exercise = ({ desc, type, index, setIndex }) => {
 export default Exercise;
 
 const styles = StyleSheet.create({
-  descActive: {
-    color: "#3DCC85",
-    fontFamily: "Jost-Regular",
-    marginVertical: 3,
-  },
   descPassive: {
-    color: "#424242",
+    textAlign: "center",
+    color: "#fff",
+    backgroundColor: "#3DCC85",
+    borderRadius: 8,
     fontFamily: "Jost-Regular",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     marginVertical: 3,
+    fontSize: 12,
   },
 });

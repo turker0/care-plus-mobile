@@ -76,8 +76,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   inputWrapper: {
-    flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
   },
   calculateWrapper: {
     flexDirection: "row",

@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import Input from "../input";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Back from "./back";
+import CustomError from "../customerror";
 
 const Register = (profile, navigation) => {
   let formBody = [];
-
+  console.log(navigation);
   for (var key in profile) {
     var encodedKey = encodeURIComponent(key);
     var encodedValue = encodeURIComponent(profile[key]);
@@ -24,9 +25,9 @@ const Register = (profile, navigation) => {
   })
     .then((res) => {
       if (res.status == 200) {
-        navigation.navigate("Home");
-      } else {
-        console.log("Wrong e-mail or password. Please try again");
+        navigation.navigate("Home", {
+          profile: profile,
+        });
       }
     })
     .then((resJson) => {})
@@ -34,8 +35,10 @@ const Register = (profile, navigation) => {
 };
 
 const Step3 = ({ navigation, setIndicate, target, setTarget, profile }) => {
+  const [error, setError] = useState(false);
   return (
     <View>
+      {error ? <CustomError text={error} /> : null}
       <Input
         label="Target weight"
         value={target}
@@ -50,7 +53,8 @@ const Step3 = ({ navigation, setIndicate, target, setTarget, profile }) => {
           onPress={() => {
             if (target !== 0) {
               Register(profile, navigation);
-            }
+              setError("");
+            } else setError("Wrong target weight input");
           }}
         >
           <View style={styles.completeWrapper}>

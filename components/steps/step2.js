@@ -6,6 +6,7 @@ import Input from "../input";
 import Next from "./next";
 import Back from "./back";
 import Exercise from "./exercise";
+import CustomError from "../customerror";
 
 const Step2 = ({
   gender,
@@ -18,7 +19,7 @@ const Step2 = ({
   setBmr,
 }) => {
   const [index, setIndex] = useState(0);
-
+  const [error, setError] = useState(false);
   const excersice = [
     {
       id: "0",
@@ -64,8 +65,6 @@ const Step2 = ({
             placeholder="Weight (cm)   "
             editable={false}
           />
-        </View>
-        <View style={styles.ageWrapper}>
           <Input
             label="Age"
             value={age}
@@ -75,10 +74,10 @@ const Step2 = ({
             length={3}
           />
         </View>
-
+        {error ? <CustomError text={error} /> : null}
         <View style={styles.pickerWrapper}>
           <Text style={styles.pickerTitle}>
-            Choose your weekly exercise level.
+            pick your weekly exercise level
           </Text>
           <FlatList
             data={excersice}
@@ -109,7 +108,8 @@ const Step2 = ({
                       excersice[index].const
                     ).toFixed(0)
               );
-            }
+              setError("");
+            } else setError("Wrong age");
           }}
         >
           <View style={styles.calculateWrapper}>
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   inputWrapper: {
-    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "center",
   },
   ageWrapper: {
@@ -155,8 +155,6 @@ const styles = StyleSheet.create({
     marginLeft: "25%",
   },
   pickerWrapper: {
-    borderRadius: 8,
-    elevation: 5,
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
@@ -165,7 +163,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Jost-Medium",
     color: "#3DCC85",
-    marginBottom: 5,
+    marginTop: 5,
   },
   calculateWrapper: {
     flexDirection: "row",

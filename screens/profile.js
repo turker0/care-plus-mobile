@@ -33,6 +33,29 @@ const checkExistence = (mail, setError, setIsExists) => {
     .catch((err) => console.log(err));
 };
 
+const validateMail = (
+  mail,
+  setError,
+  setIsExists,
+  isExists,
+  navigation,
+  profileName,
+  gender,
+  pass
+) => {
+  var re = /\S+@\S+\.\S+/;
+  if (re.test(mail)) {
+    checkExistence(mail, setError, setIsExists);
+    if (!isExists)
+      navigation.navigate("Setup", {
+        profileName: profileName,
+        gender: gender,
+        mail: mail,
+        pass: pass,
+      });
+  } else setError("Wrong mail type");
+};
+
 const Profile = ({ navigation }) => {
   const [profileName, setProfileName] = useState("");
   const [gender, setGender] = useState("");
@@ -42,8 +65,7 @@ const Profile = ({ navigation }) => {
   const [isExists, setIsExists] = useState(true);
   const [error, setError] = useState(false);
 
-  let title =
-    "Create a new profile. Manage your all diet stuffs in one profile.";
+  let title = "Manage your all diet stuffs in one profile.";
 
   return (
     <KeyboardAvoidingView
@@ -105,14 +127,16 @@ const Profile = ({ navigation }) => {
                     pass === passAgain &&
                     (gender === "f" || gender === "m")
                   ) {
-                    checkExistence(mail, setError, setIsExists);
-                    if (!isExists)
-                      navigation.navigate("Setup", {
-                        profileName: profileName,
-                        gender: gender,
-                        mail: mail,
-                        pass: pass,
-                      });
+                    validateMail(
+                      mail,
+                      setError,
+                      setIsExists,
+                      isExists,
+                      navigation,
+                      profileName,
+                      gender,
+                      pass
+                    );
                   }
                 }}
               >
