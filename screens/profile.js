@@ -73,7 +73,7 @@ const Profile = ({ navigation }) => {
       style={{ flex: 1, backgroundColor: "#fff" }}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
             {error ? <CustomError text={error} /> : null}

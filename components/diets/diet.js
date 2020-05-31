@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import DietCard from "../components/food/dietcard";
+import DietCard from "../food/dietcard";
 
 const Diet = () => {
   return (

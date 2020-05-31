@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import DietCard from "../components/food/dietcard";
 import { ScrollView } from "react-native-gesture-handler";
+import Stat from "../components/home/stat";
 
 const calcDay = (date, setDay) => {
   let current = {
@@ -31,14 +32,19 @@ const Home = ({ route }) => {
   });
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <Text style={styles.day}>
-          DAY <Text style={styles.dayRight}>{day}</Text>
-        </Text>
-        <DietCard type="Breakfast" totalCalorie="516" />
-        <DietCard type="Lunch" totalCalorie="915" />
-        <DietCard type="Dinner" totalCalorie="1300" />
+    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <Text style={styles.day}>
+            DAY <Text style={styles.dayRight}>{day}</Text>
+          </Text>
+          <DietCard type="Breakfast" totalCalorie="516" />
+          <DietCard type="Lunch" totalCalorie="915" />
+          <DietCard type="Dinner" totalCalorie="1300" />
+        </View>
+      </ScrollView>
+      <View style={styles.stats}>
+        <Stat title="DAY 10" stat={400} />
       </View>
     </ScrollView>
   );
@@ -48,7 +54,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: Dimensions.get("window").width * 0.95,
     alignItems: "center",
     marginTop: 20,
     marginBottom: 50,
@@ -60,5 +66,10 @@ const styles = StyleSheet.create({
   },
   dayRight: {
     color: "#3DCC85",
+  },
+  stats: {
+    width: Dimensions.get("window").width * 0.95,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

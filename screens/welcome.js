@@ -9,7 +9,6 @@ import {
   Keyboard,
   Dimensions,
   ImageBackground,
-  StatusBar,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Input from "../components/input";
@@ -87,12 +86,11 @@ const Welcome = ({ navigation }) => {
       style={{ flex: 1, backgroundColor: "#424242" }}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ImageBackground
-          source={require("../assets/images/bg.jpg")}
-          style={styles.bg}
-        >
-          <ScrollView>
-            <StatusBar barStyle="light-content" />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <ImageBackground
+            source={require("../assets/images/bg.jpg")}
+            style={styles.bg}
+          >
             <View style={styles.fdWrapper}>
               <Text style={styles.titleLeft}>Care, </Text>
               <Text style={styles.titleRight}>Plus</Text>
@@ -138,8 +136,8 @@ const Welcome = ({ navigation }) => {
                 </Text>
               </TouchableWithoutFeedback>
             </View>
-          </ScrollView>
-        </ImageBackground>
+          </ImageBackground>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
@@ -150,7 +148,7 @@ export default Welcome;
 const styles = StyleSheet.create({
   bg: {
     width: "100%",
-    height: "100%",
+    height: Dimensions.get("window").height,
   },
   fdWrapper: {
     width: "100%",

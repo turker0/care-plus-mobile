@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Dimensions, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import {
-  ScrollView,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import DietList from "../components/dietList";
+import Tag from "../components/diets/tag";
 
 let diets;
+let tags = ["~1500", "~2000", "~2500", "~3000", "vegan"];
+let bgColors = ["#00a8ff", "#fbc531", "#9c88ff", "#e84118", "#4cd137"];
 
-const getAllDiets = (isUpdated, setIsUpdated, setDiet1) => {
+const getAllDiets = (isUpdated, setIsUpdated) => {
   if (!isUpdated) {
     fetch("http://192.168.1.6:3000/api/diets/get/All", {
       method: "GET",
@@ -21,11 +24,6 @@ const getAllDiets = (isUpdated, setIsUpdated, setDiet1) => {
       .then((res) => res.json())
       .then((resJson) => {
         diets = resJson;
-        //resJson.forEach((element) => console.log(element.name));
-        //console.log(resJson[0]);
-        console.log(diets[0].breakfast);
-        console.log(diets[1].breakfast);
-        setDiet1(resJson[0].name);
       });
     setIsUpdated(true);
   }
@@ -47,58 +45,73 @@ const Diet = () => {
   const [filter, setFilter] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(0);
   const [isUpdated, setIsUpdated] = useState(false);
-  const [diet1, setDiet1] = useState(0);
+
   useEffect(() => {
-    getAllDiets(isUpdated, setIsUpdated, setDiet1);
+    getAllDiets(isUpdated, setIsUpdated);
   });
 
   return (
-    <ScrollView>
-      <View style={styles.contaienr}>
-        <Text style={styles.title}>Diets</Text>
-        <Text style={styles.desc}>Search a diet that you want to go on.</Text>
-        <View style={styles.filterWrapper}>
-          <Ionicons
-            name="ios-search"
-            size={24}
-            color="#3DCC85"
-            style={styles.icon}
-          />
-          <TextInput
-            style={styles.profileName}
-            onChangeText={(text) => setFilter(text)}
-            value={filter}
-            keyboardType="default"
-            maxLength={30}
-            autoCapitalize="none"
-            style={styles.filter}
-          ></TextInput>
-        </View>
-        <View style={styles.tagWrapper}>
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedFilter(0);
-              nameFilter(diets);
-            }}
-          >
-            <Text style={selectedFilter === 0 ? styles.active : styles.passive}>
-              name
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedFilter(1);
-              calorieFilter(diets);
-            }}
-          >
-            <Text style={selectedFilter === 1 ? styles.active : styles.passive}>
-              calorie
-            </Text>
-          </TouchableOpacity>
-        </View>
+    <View style={styles.contaienr}>
+      <Text style={styles.title}>Diets</Text>
+      <Text style={styles.desc}>Search a diet that you want to go on.</Text>
+      <View style={styles.filterWrapper}>
+        <Ionicons
+          name="ios-search"
+          size={24}
+          color="#3DCC85"
+          style={styles.icon}
+        />
+        <TextInput
+          style={styles.profileName}
+          onChangeText={(text) => setFilter(text)}
+          value={filter}
+          keyboardType="default"
+          maxLength={30}
+          autoCapitalize="none"
+          style={styles.filter}
+        ></TextInput>
+      </View>
+      <View
+        style={[
+          styles.tagWrapper,
+          { width: 240, marginBottom: 5, marginTop: 15 },
+        ]}
+      >
+        <Tag tag={tags[0]} bgColor={bgColors[0]} />
+        <Tag tag={tags[1]} bgColor={bgColors[1]} />
+        <Tag tag={tags[2]} bgColor={bgColors[2]} />
+      </View>
+      <View style={[styles.tagWrapper, { width: 240, marginBottom: 10 }]}>
+        <Tag tag={tags[3]} bgColor={bgColors[3]} />
+        <Tag tag={tags[4]} bgColor={bgColors[4]} />
+      </View>
+      <View style={styles.tagWrapper}>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedFilter(0);
+            nameFilter(diets);
+          }}
+        >
+          <Text style={selectedFilter === 0 ? styles.active : styles.passive}>
+            name
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedFilter(1);
+            calorieFilter(diets);
+          }}
+        >
+          <Text style={selectedFilter === 1 ? styles.active : styles.passive}>
+            calorie
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.dietsWrapper}>
         <FlatList
           data={diets}
-          list
+          keyExtractor={(item, index) => "key" + index}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => (
             <DietList
               name={item.name}
@@ -111,10 +124,9 @@ const Diet = () => {
               calDinner={item.dinnerCalorie}
             />
           )}
-          listKey={(item2, index) => "D" + index.toString()}
         />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -122,9 +134,8 @@ export default Diet;
 
 const styles = StyleSheet.create({
   contaienr: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
-    justifyContent: "center",
+    flex: 1,
+    paddingTop: "10%",
     alignItems: "center",
   },
   title: {
@@ -169,13 +180,11 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   tagWrapper: {
-    width: 240,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
-    marginBottom: 5,
   },
+
   active: {
     fontSize: 14,
     fontFamily: "Jost-Bold",
@@ -194,4 +203,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginHorizontal: 10,
   },
+  dietsWrapper: {},
 });
