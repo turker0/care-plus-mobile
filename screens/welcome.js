@@ -9,6 +9,7 @@ import {
   Keyboard,
   Dimensions,
   ImageBackground,
+  StatusBar,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Input from "../components/input";
@@ -85,6 +86,7 @@ const Welcome = ({ navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : null}
       style={{ flex: 1, backgroundColor: "#424242" }}
     >
+      <StatusBar barStyle="light-content" hidden={false} translucent={true} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <ImageBackground

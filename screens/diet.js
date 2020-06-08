@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
-import {
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import DietList from "../components/dietList";
 import Tag from "../components/diets/tag";
 
-let diets;
-let tags = ["~1500", "~2000", "~2500", "~3000", "vegan"];
-let bgColors = ["#00a8ff", "#fbc531", "#9c88ff", "#e84118", "#4cd137"];
+let tags = ["~1500", "~2000", "~2500", "~3000", "vegan", "All"];
+let bgColors = [
+  "#00a8ff",
+  "#fbc531",
+  "#9c88ff",
+  "#e84118",
+  "#4cd137",
+  "#424242",
+];
 
-const getAllDiets = (isUpdated, setIsUpdated) => {
-  if (!isUpdated) {
-    fetch("http://192.168.1.6:3000/api/diets/get/All", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      },
-    })
-      .then((res) => res.json())
-      .then((resJson) => {
-        diets = resJson;
-      });
-    setIsUpdated(true);
-  }
+const getAllDiets = (setIsUpdated, setDiets) => {
+  fetch("http://192.168.1.6:3000/api/diets/get/All", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    },
+  })
+    .then((res) => res.json())
+    .then((resJson) => {
+      setDiets(resJson);
+    });
+  setIsUpdated(true);
+  console.log("Tamam");
 };
 
 const nameFilter = (diets) => {
@@ -41,13 +42,25 @@ const calorieFilter = (diets) => {
   });
 };
 
+const deneme = (tag, diets, setFiltDiets) => {
+  setFiltDiets(
+    diets.filter((diet) => {
+      return diet.totalCalorie > 300;
+    })
+  );
+};
+
 const Diet = () => {
   const [filter, setFilter] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(0);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [diets, setDiets] = useState(0);
+  const [filtDiets, setFiltDiets] = useState(0);
 
   useEffect(() => {
-    getAllDiets(isUpdated, setIsUpdated);
+    if (!isUpdated) {
+      getAllDiets(setIsUpdated, setDiets);
+    } else console.log("Yok");
   });
 
   return (
@@ -77,13 +90,18 @@ const Diet = () => {
           { width: 240, marginBottom: 5, marginTop: 15 },
         ]}
       >
-        <Tag tag={tags[0]} bgColor={bgColors[0]} />
+        <Tag
+          tag={tags[0]}
+          bgColor={bgColors[0]}
+          onclick={() => deneme(200, diets, setFiltDiets)}
+        />
         <Tag tag={tags[1]} bgColor={bgColors[1]} />
         <Tag tag={tags[2]} bgColor={bgColors[2]} />
       </View>
       <View style={[styles.tagWrapper, { width: 240, marginBottom: 10 }]}>
         <Tag tag={tags[3]} bgColor={bgColors[3]} />
         <Tag tag={tags[4]} bgColor={bgColors[4]} />
+        <Tag tag={tags[5]} bgColor={bgColors[5]} />
       </View>
       <View style={styles.tagWrapper}>
         <TouchableOpacity

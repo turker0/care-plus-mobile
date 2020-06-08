@@ -6,9 +6,10 @@ import Welcome from "../screens/welcome";
 import Profile from "../screens/profile";
 import Setup from "../screens/setup";
 import HomeRoute from "../routes/home";
-import Header from "../components/header";
-import HeaderWBG from "../components/headerwithbg";
+import { Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { DrawerActions } from "@react-navigation/native";
 
 const profileStack = createStackNavigator();
 
@@ -72,7 +73,7 @@ const profileRoute = () => {
         <profileStack.Screen
           name="Home"
           component={HomeRoute}
-          options={{
+          options={({ navigation }) => ({
             headerBackground: () => (
               <Image
                 source={require("../assets/images/headerbg.jpg")}
@@ -82,6 +83,26 @@ const profileRoute = () => {
             ),
             title: "Care+",
             headerTintColor: "#2ecc71",
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.dispatch(DrawerActions.toggleDrawer());
+                }}
+              >
+                <Ionicons
+                  name="ios-menu"
+                  size={28}
+                  color="#fff"
+                  style={{
+                    marginLeft: 25,
+                    fontFamily: "Jost-Bold",
+                    textShadowColor: "rgba(0, 0, 0, 0.75)",
+                    textShadowOffset: { width: -1, height: 1 },
+                    textShadowRadius: 10,
+                  }}
+                />
+              </TouchableOpacity>
+            ),
             headerTitleStyle: {
               fontSize: 24,
               fontFamily: "Jost-Bold",
@@ -90,7 +111,7 @@ const profileRoute = () => {
               textShadowRadius: 10,
               backgroundColor: "rgba(255, 255, 255, 0.1)",
             },
-          }}
+          })}
         />
       </profileStack.Navigator>
     </NavigationContainer>

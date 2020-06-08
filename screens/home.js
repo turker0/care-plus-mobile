@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Dimensions } from "react-native";
 import DietCard from "../components/food/dietcard";
 import { ScrollView } from "react-native-gesture-handler";
 import Stat from "../components/home/stat";
+import { Feather } from "@expo/vector-icons";
 
 const calcDay = (date, setDay) => {
   let current = {
@@ -43,9 +44,64 @@ const Home = ({ route }) => {
           <DietCard type="Dinner" totalCalorie="1300" />
         </View>
       </ScrollView>
-      <View style={styles.stats}>
-        <Stat title="DAY 10" stat={400} />
-      </View>
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={styles.statTitle}>STATS</Text>
+          <Text style={styles.statName}>
+            These are your stats, {profile.name.split(" ")[0]}
+          </Text>
+          <View style={styles.stats}>
+            <Stat
+              title="Started Date"
+              stat={
+                profile.date.slice(8, 10) +
+                " " +
+                profile.date.slice(5, 7) +
+                " " +
+                profile.date.slice(0, 4)
+              }
+            />
+            <Stat title="Total Day" stat={day} />
+            <Stat title="Started BMI" stat={profile.bmi} />
+            <Stat
+              title="Target BMI"
+              stat={(
+                (profile.target / (profile.height * profile.height)) *
+                10000
+              ).toFixed(0)}
+            />
+            <Stat title="Started BMR" stat={profile.bmr} />
+            <Stat
+              title="Target BMR"
+              stat={((profile.bmr / profile.weight) * profile.target).toFixed(
+                0
+              )}
+            />
+            <Stat
+              title="Total Calorie Loss/Gain"
+              stat={Math.abs(
+                profile.bmr -
+                  (profile.bmr / profile.weight) * profile.target * day
+              ).toFixed(0)}
+            />
+            <Stat
+              title="Total Weight Loss/Gain"
+              stat={(
+                Math.abs(
+                  profile.bmr -
+                    (profile.bmr / profile.weight) * profile.target * day
+                ) / 7400
+              ).toFixed(0)}
+            />
+          </View>
+          <View style={styles.fdWrapper}>
+            <Feather name="info" size={12} color="#424242" />
+            <Text style={styles.statInfo}>
+              numbers are based on your physical informations and target weight.
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
     </ScrollView>
   );
 };
@@ -56,8 +112,7 @@ const styles = StyleSheet.create({
   container: {
     width: Dimensions.get("window").width * 0.95,
     alignItems: "center",
-    marginTop: 20,
-    marginBottom: 50,
+    marginTop: Dimensions.get("window").height / 20,
   },
   day: {
     fontSize: 24,
@@ -68,8 +123,31 @@ const styles = StyleSheet.create({
     color: "#3DCC85",
   },
   stats: {
-    width: Dimensions.get("window").width * 0.95,
+    width: 300,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  statTitle: {
+    fontSize: 24,
+    fontFamily: "Jost-Bold",
+  },
+  statName: {
+    fontSize: 16,
+    fontFamily: "Jost-Medium",
+    margin: Dimensions.get("window").height / 50,
+  },
+  fdWrapper: {
+    marginTop: 10,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+  statInfo: {
+    fontSize: 10,
+    fontFamily: "Jost-Regular",
+    marginLeft: 5,
+    color: "#424242",
   },
 });

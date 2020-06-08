@@ -1,13 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const Tag = ({ tag, bgColor }) => {
+const Tag = ({ tag, bgColor, onclick }) => {
   return (
     <View style={[styles.container, { backgroundColor: bgColor }]}>
-      <TouchableWithoutFeedback>
+      <TouchableOpacity onPress={onclick}>
         <Text style={styles.tag}>{tag}</Text>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
     </View>
   );
 };
